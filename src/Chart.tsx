@@ -39,24 +39,39 @@ const CustomSymbol = ({ size, color, borderWidth, borderColor }) => (
     />
   </g>
 )
-
+const initData = [
+  {
+    id: 'values',
+    data: [
+      { x: 0, y: 24605 },
+      { x: 1, y: 20000 },
+      { x: 2, y: 30300 },
+      { x: 3, y: 34000 },
+      { x: 4, y: 32000 },
+    ],
+  },
+]
+const data2 = [
+  {
+    id: 'values',
+    data: [
+      { x: 0, y: 20605 },
+      { x: 1, y: 28000 },
+      { x: 2, y: 36300 },
+      { x: 3, y: 34000 },
+      { x: 4, y: 39000 },
+    ],
+  },
+]
 export const Chart: React.SFC<any> = () => {
+  const [data, setData] = React.useState(initData)
+  const onMouseLeave = () => setData(initData)
+  const onMouseEnter = () => setData(data2)
   return (
-    <ChartContainer>
+    <ChartContainer onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <Line
         {...commonProperties}
-        data={[
-          {
-            id: 'values',
-            data: [
-              { x: 0, y: 24605 },
-              { x: 1, y: 20000 },
-              { x: 2, y: 30300 },
-              { x: 3, y: 34000 },
-              { x: 4, y: 32000 },
-            ],
-          },
-        ]}
+        data={data}
         curve="monotoneX"
         dotSize={0}
         dotBorderColor="inherit:darker(0.2)"
