@@ -6,7 +6,7 @@ import { Amount } from './Amount'
 import { Chart } from './Chart'
 import { BottomBar } from './BottomBar'
 
-const animate = keyframes`
+const scaleUp = keyframes`
   40% {
     transform-origin: top;
     transform: translateY(3rem) rotateX(5deg) scale(1.2);
@@ -18,6 +18,16 @@ const animate = keyframes`
   100% {
     transform-origin: top;
     transform: translateY(0) rotateX(0deg) scale(1.8);
+  }
+`
+const scaleDown = keyframes`
+  0% {
+    transform-origin: top;
+    transform: translateY(0) rotateX(0deg) scale(1.8);
+  }
+  100% {
+    transform-origin: top;
+    transform: translateY(0) rotateX(0deg) scale(1);
   }
 `
 // &:hover {
@@ -41,11 +51,34 @@ const PhoneContainer = styled.div`
   transform: scale(1) translateY(0) rotateX(0deg);
   will-change: transform;
   transform-style: preserve-3d;
+  animation: ${({ animation }: { animation: any }) => animation} 2s linear
+    forwards;
 `
 
 export const Phone: React.SFC<any> = () => {
+  const [animation, setAnimation] = React.useState(scaleDown)
+  const [canAnimate, setCanAnimate] = React.useState(true)
+  const toggleAnimation = () => {
+    if (canAnimate && animation === scaleDown) {
+      setCanAnimate(false)
+      setAnimation(scaleUp)
+      setTimeout(() => {
+        setCanAnimate(true)
+      }, 2500)
+    } else if (canAnimate && animation === scaleUp) {
+      setCanAnimate(false)
+      setAnimation(scaleDown)
+      setTimeout(() => {
+        setCanAnimate(true)
+      }, 2500)
+    } else {
+      setCanAnimate(false)
+    }
+  }
+  // hacky way of having nice animation
+  // because hover is laggy as same as mouseEnter and mouseLeave
   return (
-    <PhoneContainer>
+    <PhoneContainer animation={animation} onClick={toggleAnimation}>
       <Topbar />
       <CryptoCurrencies />
       <Amount />
