@@ -1,5 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
+import AnimatedNumber from 'react-animated-number'
 
 const AmountContainer = styled.div`
   display: flex;
@@ -12,17 +13,26 @@ const Currency = styled.span`
   margin-right: 5px;
   font-size: 1.125rem;
 `
-const Value = styled.span`
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: rgb(53, 58, 110);
-`
+const Value = styled.span``
 
 export const Amount: React.SFC<any> = () => {
   return (
     <AmountContainer>
       <Currency>$</Currency>
-      <Value>24,605</Value>
+      <AnimatedNumber
+        component="text"
+        value={24605}
+        style={{
+          fontSize: '2.5rem',
+          fontWeight: 'bold',
+          color: 'rgb(53, 58, 110)',
+          transition: '2s ease-out',
+          transitionProperty: 'background-color, color, opacity',
+        }}
+        frameStyle={perc => (perc === 100 ? {} : { backgroundColor: '#fff' })}
+        duration={1000}
+        stepPrecision={0}
+      />
     </AmountContainer>
   )
 }
