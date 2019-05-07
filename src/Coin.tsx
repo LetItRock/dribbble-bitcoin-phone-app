@@ -19,6 +19,7 @@ const CoinContainer = styled.div`
   transform-style: preserve-3d;
   transform-origin: center center;
   transform: rotateY(0) scale(1);
+  will-change: transform, animation;
 
   &:hover {
     animation: ${rotateCoin} 5s ease-out infinite;
@@ -108,6 +109,7 @@ const Part = styled.div`
   transform-style: preserve-3d;
   background-color: rgb(160, 183, 210);
   transform-origin: center;
+  will-change: transform;
 
   ${({ i }) => css`
     transform: rotateY(calc(${i} * 12deg)) translateZ(var(--half-size));

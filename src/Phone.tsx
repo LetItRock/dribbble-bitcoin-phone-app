@@ -1,5 +1,6 @@
 import * as React from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes, css } from 'styled-components'
+import { useGesture } from 'react-use-gesture'
 import { Topbar } from './Topbar'
 import { CryptoCurrencies } from './CryptoCurrencies'
 import { Amount } from './Amount'
@@ -49,15 +50,42 @@ const PhoneContainer = styled.div`
   transition: all 0.5s ease;
   transform-origin: center;
   transform: scale(1) translateY(0) rotateX(0deg);
-  will-change: transform;
+  will-change: transform, animation;
   transform-style: preserve-3d;
   animation: ${({ animation }: { animation: any }) => animation} 2s linear
     forwards;
+`
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`
+const RefreshCircle = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  margin-left: -2rem;
+  width: 4rem;
+  height: 4rem;
+  z-index: 1;
+  background-color: white;
+  border-radius: 100%;
+  box-shadow: 0 0 10px lightgrey;
+  will-change: transform;
+  animation: ${fadeIn} 1s ease;
+
+  ${({ translateY }: { translateY: number }) => css`
+    transform: translateY(${translateY}px);
+  `}
 `
 
 export const Phone: React.SFC<any> = () => {
   const [animation, setAnimation] = React.useState(scaleDown)
   const [canAnimate, setCanAnimate] = React.useState(true)
+  const [dragging, setIsDragging] = React.useState(false)
   const toggleAnimation = () => {
     if (canAnimate && animation === scaleDown) {
       setCanAnimate(false)
@@ -75,11 +103,35 @@ export const Phone: React.SFC<any> = () => {
       setCanAnimate(false)
     }
   }
+  const [{ startY, distance }, setDistance] = React.useState({
+    startY: 0,
+    distance: 0,
+  })
+  const bind = useGesture({
+    onDrag: ({ delta: [_, deltaY], distance, dragging, first, last }) => {
+      let startYToSet = startY
+      let distanceToSet = distance
+      if (first || last) {
+        startYToSet = 0
+      }
+      if (deltaY < 0) {
+        distanceToSet = 0
+      } else if (deltaY > 100) {
+        distanceToSet = 100
+      }
+
+      setIsDragging(dragging)
+      setDistance({ startY: startYToSet, distance: distanceToSet })
+    },
+    // library handles this type of event
+    onHover: toggleAnimation,
+  } as any)
   // hacky way of having nice animation
   // because hover is laggy as same as mouseEnter and mouseLeave
   return (
-    <PhoneContainer animation={animation} onClick={toggleAnimation}>
+    <PhoneContainer {...bind()} animation={animation}>
       <Topbar />
+      {dragging && <RefreshCircle translateY={startY + distance} />}
       <CryptoCurrencies />
       <Amount />
       <Chart />

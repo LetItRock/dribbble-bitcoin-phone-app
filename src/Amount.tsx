@@ -30,7 +30,7 @@ export const Amount: React.SFC<any> = () => {
           transitionProperty: 'background-color, color, opacity',
         }}
         frameStyle={perc => (perc === 100 ? {} : { backgroundColor: '#fff' })}
-        duration={1000}
+        duration={2000}
         stepPrecision={0}
       />
     </AmountContainer>
