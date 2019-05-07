@@ -1,15 +1,15 @@
 import * as React from 'react'
 import styled, { css, keyframes } from 'styled-components'
 
-const rotateMoney = keyframes`
+const rotateCoin = keyframes`
   0% {
     transform: rotateY(0);
   }
   100% {
-    transform: rotateY(360deg);
+    transform: rotateY(2160deg);
   }
 `
-//animation: ${rotateMoney} 10s linear infinite;
+//animation: ${rotateCoin} 10s linear infinite;
 const CoinContainer = styled.div`
   --size: 2rem;
   width: var(--size);
@@ -18,7 +18,11 @@ const CoinContainer = styled.div`
   perspective: 1000px;
   transform-style: preserve-3d;
   transform-origin: center center;
-  transform: rotateY(-176deg) scale(1);
+  transform: rotateY(0) scale(1);
+
+  &:hover {
+    animation: ${rotateCoin} 5s ease-out infinite;
+  }
 
   ${({ bigger }: { bigger: boolean }) =>
     bigger &&
@@ -27,6 +31,12 @@ const CoinContainer = styled.div`
       width: var(--size);
       height: var(--size);
       background-size: calc(var(--size) - 0.75rem);
+    `}
+
+  ${({ rotateY }: { rotateY: string }) =>
+    rotateY &&
+    css`
+      transform: rotateY(${rotateY});
     `}
 `
 const BaseSide = styled.div`
@@ -63,7 +73,7 @@ const BaseSide = styled.div`
     `}
 `
 const Front = styled(BaseSide)`
-  transform: rotateY(0) translateZ(0);
+  transform: rotateY(0) translateZ(2px);
 `
 const Back = styled(BaseSide)`
   transform: rotateY(-180deg) translateZ(2px);
@@ -87,7 +97,7 @@ const PartContainer = styled.div`
 `
 const Part = styled.div`
   --width: 4px;
-  --height: 2px;
+  --height: 4px;
   --coin-size: 2rem;
   --half-size: calc(var(--coin-size) / 2);
   width: var(--width);
@@ -106,7 +116,7 @@ const Part = styled.div`
   ${({ yellow }: any) =>
     yellow &&
     css`
-      background-color: rgb(245, 181, 76);
+      background-color: #e3953c;
     `}
   ${({ bigger }: { bigger: boolean }) =>
     bigger &&

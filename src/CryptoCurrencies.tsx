@@ -28,9 +28,9 @@ export const CryptoCurrencies: React.SFC<any> = () => {
   const [selected, setSelected] = React.useState(1)
   return (
     <CryptoCurrenciesContainer>
-      <Coin icon="ethereum" bigger={selected === 0} />
-      <Coin icon="bitcoin" bigger={selected === 1} yellow />
-      <Coin icon="ripple" bigger={selected === 2} />
+      <Coin icon="ethereum" bigger={selected === 0} rotateY={'12deg'} />
+      <Coin icon="bitcoin" bigger={selected === 1} yellow rotateY={'0deg'} />
+      <Coin icon="ripple" bigger={selected === 2} rotateY={'-12deg'} />
       <CurrencyName highlight={selected === 0}>Ripple</CurrencyName>
       <CurrencyName highlight={selected === 1}>Bitcoin</CurrencyName>
       <CurrencyName highlight={selected === 2}>Ethereum</CurrencyName>
