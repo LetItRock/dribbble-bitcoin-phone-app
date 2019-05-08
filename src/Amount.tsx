@@ -1,8 +1,9 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import AnimatedNumber from 'react-animated-number'
+import { useSpring, animated } from 'react-spring'
+import { useBouncing } from './useBouncing'
 
-const AmountContainer = styled.div`
+const AmountContainer = styled(animated.div)`
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -13,15 +14,24 @@ const Currency = styled.span`
   margin-right: 5px;
   font-size: 1.125rem;
 `
-const Value = styled.span``
+const Value = styled(animated.div)``
 
-export const Amount: React.SFC<any> = () => {
+export const Amount: React.SFC<any> = ({ translateY }) => {
+  const props = useSpring({
+    config: {
+      duration: 2000,
+    },
+    value: 24605,
+    from: {
+      value: 0,
+    },
+  })
+  const style = useBouncing({ translateY })
+
   return (
-    <AmountContainer>
+    <AmountContainer style={style}>
       <Currency>$</Currency>
-      <AnimatedNumber
-        component="text"
-        value={24605}
+      <Value
         style={{
           fontSize: '2.5rem',
           fontWeight: 'bold',
@@ -29,10 +39,10 @@ export const Amount: React.SFC<any> = () => {
           transition: '2s ease-out',
           transitionProperty: 'background-color, color, opacity',
         }}
-        frameStyle={perc => (perc === 100 ? {} : { backgroundColor: '#fff' })}
-        duration={2000}
-        stepPrecision={0}
-      />
+        {...props}
+      >
+        {props.value.interpolate(val => Math.round(val))}
+      </Value>
     </AmountContainer>
   )
 }

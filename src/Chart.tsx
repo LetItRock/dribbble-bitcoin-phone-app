@@ -1,8 +1,10 @@
 import * as React from 'react'
 import styled, { keyframes } from 'styled-components'
+import { animated } from 'react-spring'
 import { Line } from '@nivo/line'
+import { useBouncing } from './useBouncing'
 
-const ChartContainer = styled.div``
+const ChartContainer = styled(animated.div)``
 const commonProperties = {
   width: 320,
   height: 300,
@@ -63,12 +65,18 @@ const data2 = [
     ],
   },
 ]
-export const Chart: React.SFC<any> = () => {
+export const Chart: React.SFC<any> = ({ translateY }) => {
   const [data, setData] = React.useState(initData)
   const onMouseLeave = () => setData(initData)
   const onMouseEnter = () => setData(data2)
+  const style = useBouncing({ translateY })
+
   return (
-    <ChartContainer onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <ChartContainer
+      style={style}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <Line
         {...commonProperties}
         data={data}

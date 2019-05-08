@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled, { keyframes, css } from 'styled-components'
 import { useGesture } from 'react-use-gesture'
+import { useSpring } from 'react-spring'
 import { Topbar } from './Topbar'
 import { CryptoCurrencies } from './CryptoCurrencies'
 import { Amount } from './Amount'
@@ -111,12 +112,13 @@ export const Phone: React.SFC<any> = () => {
     onDrag: ({ delta: [_, deltaY], distance, dragging, first, last }) => {
       let startYToSet = startY
       let distanceToSet = distance
-      if (first || last) {
+      if (first || last || !dragging) {
         startYToSet = 0
+        distanceToSet = 0
       }
       if (deltaY < 0) {
         distanceToSet = 0
-      } else if (deltaY > 100) {
+      } else if (deltaY > 100 && dragging) {
         distanceToSet = 100
       }
 
@@ -124,17 +126,18 @@ export const Phone: React.SFC<any> = () => {
       setDistance({ startY: startYToSet, distance: distanceToSet })
     },
     // library handles this type of event
-    onHover: toggleAnimation,
+    // onHover: toggleAnimation,
   } as any)
+  const translateY = startY + distance
   // hacky way of having nice animation
   // because hover is laggy as same as mouseEnter and mouseLeave
   return (
     <PhoneContainer {...bind()} animation={animation}>
       <Topbar />
-      {dragging && <RefreshCircle translateY={startY + distance} />}
-      <CryptoCurrencies />
-      <Amount />
-      <Chart />
+      {dragging && <RefreshCircle translateY={translateY} />}
+      <CryptoCurrencies translateY={translateY} />
+      <Amount translateY={translateY} />
+      <Chart translateY={translateY} />
       <BottomBar />
     </PhoneContainer>
   )

@@ -15,7 +15,8 @@ const CoinContainer = styled.div`
   width: var(--size);
   height: var(--size);
   position: relative;
-  perspective: 1000px;
+  backface-visibility: hidden;
+  perspective: 1000;
   transform-style: preserve-3d;
   transform-origin: center center;
   transform: rotateY(0) scale(1);

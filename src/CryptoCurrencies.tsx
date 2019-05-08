@@ -1,8 +1,10 @@
 import * as React from 'react'
 import styled, { css } from 'styled-components'
+import { animated } from 'react-spring'
+import { useBouncing } from './useBouncing'
 import { Coin } from './Coin'
 
-const CryptoCurrenciesContainer = styled.div`
+const CryptoCurrenciesContainer = styled(animated.div)`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-row-gap: 1rem;
@@ -13,7 +15,6 @@ const CryptoCurrenciesContainer = styled.div`
   margin: 0 30px;
   margin-bottom: 3rem;
 `
-
 const CurrencyName = styled.span`
   color: rgb(208, 215, 225);
   ${({ highlight }: { highlight: boolean }) =>
@@ -24,10 +25,11 @@ const CurrencyName = styled.span`
     `}
 `
 
-export const CryptoCurrencies: React.SFC<any> = () => {
+export const CryptoCurrencies: React.SFC<any> = ({ translateY }) => {
   const [selected, setSelected] = React.useState(1)
+  const style = useBouncing({ translateY })
   return (
-    <CryptoCurrenciesContainer>
+    <CryptoCurrenciesContainer style={style}>
       <Coin icon="ethereum" bigger={selected === 0} rotateY={'12deg'} />
       <Coin icon="bitcoin" bigger={selected === 1} yellow rotateY={'0deg'} />
       <Coin icon="ripple" bigger={selected === 2} rotateY={'-12deg'} />
