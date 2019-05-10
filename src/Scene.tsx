@@ -22,13 +22,29 @@ const Text = styled.span`
   justify-content: flex-end;
   flex-shrink: 1;
 `
+const Button = styled.span`
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 100%;
+  background-color: rgb(53, 58, 110);
+  background-image: url(glass.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 1.25em;
+  cursor: pointer;
+`
 
 export const Scene: React.SFC<any> = () => {
+  const [scale, setScale] = React.useState(false)
   return (
     <SceneContainer>
       <DotsGrid />
-      <PhoneScene />
+      <PhoneScene scale={scale} />
       <Text>XD</Text>
+      <Button onClick={() => setScale(!scale)} />
     </SceneContainer>
   )
 }

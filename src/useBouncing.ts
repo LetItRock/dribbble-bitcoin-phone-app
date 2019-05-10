@@ -4,7 +4,9 @@ import { useSpring, config } from 'react-spring'
 export const useBouncing = ({ translateY }) => {
   const translate = y => `translateY(${y}px)`
   const [{ y }, set] = useSpring(() => ({
-    config: config.wobbly,
+    config: {
+      ...config.wobbly,
+    },
     y: 0,
   }))
   React.useEffect(() => {

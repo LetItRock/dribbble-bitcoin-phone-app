@@ -16,33 +16,36 @@ const Currency = styled.span`
 `
 const Value = styled(animated.div)``
 
-export const Amount: React.SFC<any> = ({ translateY }) => {
-  const props = useSpring({
-    config: {
-      duration: 2000,
-    },
-    value: 24605,
-    from: {
-      value: 0,
-    },
-  })
-  const style = useBouncing({ translateY })
+export const Amount: React.SFC<any> = React.memo(
+  ({ refreshAmount, translateY }) => {
+    const props = useSpring({
+      config: {
+        duration: 2000,
+      },
+      value: 24605,
+      from: {
+        value: 0,
+      },
+      reset: refreshAmount,
+    })
+    const style = useBouncing({ translateY })
 
-  return (
-    <AmountContainer style={style}>
-      <Currency>$</Currency>
-      <Value
-        style={{
-          fontSize: '2.5rem',
-          fontWeight: 'bold',
-          color: 'rgb(53, 58, 110)',
-          transition: '2s ease-out',
-          transitionProperty: 'background-color, color, opacity',
-        }}
-        {...props}
-      >
-        {props.value.interpolate(val => Math.round(val))}
-      </Value>
-    </AmountContainer>
-  )
-}
+    return (
+      <AmountContainer style={style}>
+        <Currency>$</Currency>
+        <Value
+          style={{
+            fontSize: '2.5rem',
+            fontWeight: 'bold',
+            color: 'rgb(53, 58, 110)',
+            transition: '2s ease-out',
+            transitionProperty: 'background-color, color, opacity',
+          }}
+          {...props}
+        >
+          {props.value.interpolate(val => Math.round(val))}
+        </Value>
+      </AmountContainer>
+    )
+  },
+)

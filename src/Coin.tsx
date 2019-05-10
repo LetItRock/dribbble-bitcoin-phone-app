@@ -3,28 +3,28 @@ import styled, { css, keyframes } from 'styled-components'
 
 const rotateCoin = keyframes`
   0% {
-    transform: rotateY(0);
+    transform: rotateX(0);
   }
   100% {
-    transform: rotateY(2160deg);
+    transform: rotateX(2160deg);
   }
 `
-//animation: ${rotateCoin} 10s linear infinite;
 const CoinContainer = styled.div`
   --size: 2rem;
   width: var(--size);
   height: var(--size);
   position: relative;
   backface-visibility: hidden;
-  perspective: 1000;
   transform-style: preserve-3d;
   transform-origin: center center;
   transform: rotateY(0) scale(1);
   will-change: transform, animation;
 
-  &:hover {
-    animation: ${rotateCoin} 5s ease-out infinite;
-  }
+  ${({ rotate, bigger }: { rotate: boolean; bigger: boolean }) =>
+    rotate &&
+    css`
+      animation: ${rotateCoin} 5s ease-out ${!bigger ? '.3s' : ''} forwards;
+    `}
 
   ${({ bigger }: { bigger: boolean }) =>
     bigger &&
@@ -78,7 +78,7 @@ const Front = styled(BaseSide)`
   transform: rotateY(0) translateZ(2px);
 `
 const Back = styled(BaseSide)`
-  transform: rotateY(-180deg) translateZ(2px);
+  transform: rotateY(0) rotateX(180deg) translateZ(2px);
 `
 const PartContainer = styled.div`
   --container-size: 2rem;

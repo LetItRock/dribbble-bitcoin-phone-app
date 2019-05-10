@@ -7,15 +7,16 @@ import { CryptoCurrencies } from './CryptoCurrencies'
 import { Amount } from './Amount'
 import { Chart } from './Chart'
 import { BottomBar } from './BottomBar'
+import { useDragDown } from './useDragDown'
 
 const scaleUp = keyframes`
   40% {
     transform-origin: top;
-    transform: translateY(3rem) rotateX(5deg) scale(1.2);
+    transform: translateY(1rem) rotateX(-5deg) scale(1.2);
   }
   90% {
     transform-origin: top;
-    transform: translateY(0) rotateX(10deg) scale(1.8);
+    transform: translateY(4rem) rotateX(-15deg) scale(1.8);
   }
   100% {
     transform-origin: top;
@@ -41,18 +42,20 @@ const PhoneContainer = styled.div`
   left: 50%;
   width: 20rem;
   height: 42rem;
+  z-index: 100;
   display: flex;
   flex-direction: column;
+  transform-style: preserve-3d;
   padding: 20px 0 0 0;
   margin-left: -10rem;
+  overflow-y: hidden;
   background-color: white;
   border-radius: 50px;
   box-shadow: 0 0 30px rgba(53, 58, 110, 0.2);
   transition: all 0.5s ease;
   transform-origin: center;
-  transform: scale(1) translateY(0) rotateX(0deg);
+  transform: scale(1) translateY(0) translateZ(100px) rotateX(0deg);
   will-change: transform, animation;
-  transform-style: preserve-3d;
   animation: ${({ animation }: { animation: any }) => animation} 2s linear
     forwards;
 `
@@ -83,60 +86,20 @@ const RefreshCircle = styled.div`
   `}
 `
 
-export const Phone: React.SFC<any> = () => {
-  const [animation, setAnimation] = React.useState(scaleDown)
-  const [canAnimate, setCanAnimate] = React.useState(true)
-  const [dragging, setIsDragging] = React.useState(false)
-  const toggleAnimation = () => {
-    if (canAnimate && animation === scaleDown) {
-      setCanAnimate(false)
-      setAnimation(scaleUp)
-      setTimeout(() => {
-        setCanAnimate(true)
-      }, 2500)
-    } else if (canAnimate && animation === scaleUp) {
-      setCanAnimate(false)
-      setAnimation(scaleDown)
-      setTimeout(() => {
-        setCanAnimate(true)
-      }, 2500)
-    } else {
-      setCanAnimate(false)
-    }
-  }
-  const [{ startY, distance }, setDistance] = React.useState({
-    startY: 0,
-    distance: 0,
-  })
-  const bind = useGesture({
-    onDrag: ({ delta: [_, deltaY], distance, dragging, first, last }) => {
-      let startYToSet = startY
-      let distanceToSet = distance
-      if (first || last || !dragging) {
-        startYToSet = 0
-        distanceToSet = 0
-      }
-      if (deltaY < 0) {
-        distanceToSet = 0
-      } else if (deltaY > 100 && dragging) {
-        distanceToSet = 100
-      }
-
-      setIsDragging(dragging)
-      setDistance({ startY: startYToSet, distance: distanceToSet })
+export const Phone: React.SFC<any> = ({ scale }) => {
+  const ref = React.useRef(null)
+  const { translateY, dragging, first, last } = useDragDown({
+    ref,
+    config: {
+      maxDistance: 100,
     },
-    // library handles this type of event
-    // onHover: toggleAnimation,
-  } as any)
-  const translateY = startY + distance
-  // hacky way of having nice animation
-  // because hover is laggy as same as mouseEnter and mouseLeave
+  })
   return (
-    <PhoneContainer {...bind()} animation={animation}>
+    <PhoneContainer ref={ref} animation={!scale ? scaleDown : scaleUp}>
       <Topbar />
       {dragging && <RefreshCircle translateY={translateY} />}
-      <CryptoCurrencies translateY={translateY} />
-      <Amount translateY={translateY} />
+      <CryptoCurrencies rotateCoins={last} translateY={translateY} />
+      <Amount refreshAmount={last} translateY={translateY} />
       <Chart translateY={translateY} />
       <BottomBar />
     </PhoneContainer>

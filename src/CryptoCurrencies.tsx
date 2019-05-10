@@ -25,17 +25,35 @@ const CurrencyName = styled.span`
     `}
 `
 
-export const CryptoCurrencies: React.SFC<any> = ({ translateY }) => {
-  const [selected, setSelected] = React.useState(1)
-  const style = useBouncing({ translateY })
-  return (
-    <CryptoCurrenciesContainer style={style}>
-      <Coin icon="ethereum" bigger={selected === 0} rotateY={'12deg'} />
-      <Coin icon="bitcoin" bigger={selected === 1} yellow rotateY={'0deg'} />
-      <Coin icon="ripple" bigger={selected === 2} rotateY={'-12deg'} />
-      <CurrencyName highlight={selected === 0}>Ripple</CurrencyName>
-      <CurrencyName highlight={selected === 1}>Bitcoin</CurrencyName>
-      <CurrencyName highlight={selected === 2}>Ethereum</CurrencyName>
-    </CryptoCurrenciesContainer>
-  )
-}
+export const CryptoCurrencies: React.SFC<any> = React.memo(
+  ({ translateY, rotateCoins }) => {
+    const [selected, setSelected] = React.useState(1)
+    const style = useBouncing({ translateY })
+    return (
+      <CryptoCurrenciesContainer style={style}>
+        <Coin
+          rotate={rotateCoins}
+          icon="ethereum"
+          bigger={selected === 0}
+          rotateY={'12deg'}
+        />
+        <Coin
+          rotate={rotateCoins}
+          icon="bitcoin"
+          bigger={selected === 1}
+          yellow
+          rotateY={'0deg'}
+        />
+        <Coin
+          rotate={rotateCoins}
+          icon="ripple"
+          bigger={selected === 2}
+          rotateY={'-12deg'}
+        />
+        <CurrencyName highlight={selected === 0}>Ripple</CurrencyName>
+        <CurrencyName highlight={selected === 1}>Bitcoin</CurrencyName>
+        <CurrencyName highlight={selected === 2}>Ethereum</CurrencyName>
+      </CryptoCurrenciesContainer>
+    )
+  },
+)

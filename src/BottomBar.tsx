@@ -1,7 +1,10 @@
 import * as React from 'react'
 import styled, { keyframes } from 'styled-components'
+import { useGesture } from 'react-use-gesture'
+import { useSpring, animated } from 'react-spring'
+import { useDragDown } from './useDragDown'
 
-const BottomBarContainer = styled.div`
+const BottomBarContainer = styled(animated.div)`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -105,8 +108,31 @@ const Progress = styled.div`
 `
 
 export const BottomBar: React.SFC<any> = () => {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const [{ y }, set] = useSpring(() => ({
+    y: 0,
+  }))
+  const { translateY, canceled } = useDragDown({
+    ref,
+    config: {
+      maxDistance: ref => ref.current.clientHeight / 2.5,
+      maxDistanceHit: ({ cancel }) => {
+        cancel()
+        return true
+      },
+    },
+  })
+  const yToSet = canceled ? ref.current.clientHeight - 33 : translateY
+  set({ y: yToSet })
   return (
-    <BottomBarContainer>
+    <BottomBarContainer
+      ref={ref}
+      style={{
+        transform: y.interpolate(
+          translateY => `translate3d(0,${translateY}px,0)`,
+        ),
+      }}
+    >
       <Top />
       <ItemsContainer>
         <Item>
