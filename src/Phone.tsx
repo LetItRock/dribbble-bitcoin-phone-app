@@ -28,6 +28,10 @@ const scaleDown = keyframes`
     transform-origin: top;
     transform: translateY(0) rotateX(0deg) scale(1.8);
   }
+  40% {
+    transform-origin: top;
+    transform: translateY(0) rotateX(15deg) scale(1.4);
+  }
   100% {
     transform-origin: top;
     transform: translateY(0) rotateX(0deg) scale(1);
