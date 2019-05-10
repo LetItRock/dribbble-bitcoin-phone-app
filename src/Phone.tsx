@@ -16,7 +16,7 @@ const scaleUp = keyframes`
   }
   90% {
     transform-origin: top;
-    transform: translateY(4rem) rotateX(-15deg) scale(1.8);
+    transform: translateY(2rem) rotateX(-15deg) scale(1.8);
   }
   100% {
     transform-origin: top;
@@ -92,12 +92,13 @@ const RefreshCircle = styled.div`
 
 export const Phone: React.SFC<any> = ({ scale }) => {
   const ref = React.useRef(null)
-  const { translateY, dragging, first, last } = useDragDown({
+  const { translateY, dragging, last } = useDragDown({
     ref,
     config: {
       maxDistance: 100,
     },
   })
+  // unfortunatelly useGesture is called even on click so that triggers animations ;(
   return (
     <PhoneContainer ref={ref} animation={!scale ? scaleDown : scaleUp}>
       <Topbar />

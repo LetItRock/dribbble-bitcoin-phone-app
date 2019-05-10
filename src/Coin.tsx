@@ -14,6 +14,7 @@ const CoinContainer = styled.div`
   width: var(--size);
   height: var(--size);
   position: relative;
+  margin: 5px;
   backface-visibility: hidden;
   transform-style: preserve-3d;
   transform-origin: center center;
