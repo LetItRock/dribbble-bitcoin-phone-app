@@ -122,7 +122,7 @@ export const BottomBar: React.SFC<any> = () => {
       },
     },
   })
-  const yToSet = canceled ? ref.current.clientHeight - 33 : translateY
+  const yToSet = canceled ? ref.current.clientHeight - 28 : translateY
   set({ y: yToSet })
   return (
     <BottomBarContainer
